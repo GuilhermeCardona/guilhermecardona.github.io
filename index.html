@@ -3,291 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Medproteg - Hospital São Lucas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Medproteg - Compliance Jurídico Digital para Saúde</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
-        .sidebar { background-color: #007bff; color: white; min-height: 100vh; position: fixed; width: 250px; transition: width 0.3s; }
-        .sidebar.collapsed { width: 70px; }
-        .sidebar a { color: white; text-decoration: none; display: block; padding: 15px; }
-        .sidebar a:hover { background-color: #0056b3; }
-        .main-content { margin-left: 250px; padding: 20px; transition: margin-left 0.3s; }
-        .main-content.expanded { margin-left: 70px; }
-        .card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .gauge-container { position: relative; width: 200px; height: 200px; margin: 0 auto; }
-        .alert-custom { background-color: #fff3cd; border-color: #ffeaa7; color: #856404; }
-        .compliance-section { background-color: #e7f3ff; padding: 20px; border-radius: 10px; }
-        .chatbot { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); display: none; z-index: 1000; }
-        .chatbot-header { background: #007bff; color: white; padding: 10px; border-radius: 10px 10px 0 0; }
-        .chat-messages { height: 300px; overflow-y: auto; padding: 10px; }
-        .chat-input { padding: 10px; border-top: 1px solid #ddd; }
-        .fab { position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; z-index: 1001; }
-        @media (max-width: 768px) { .sidebar { width: 100%; position: relative; } .main-content { margin-left: 0; } .chatbot { width: 90%; right: 5%; } }
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f4f7fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        header {
+            background: linear-gradient(135deg, #003366 0%, #0056b3 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        header h1 {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        header p {
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        nav {
+            margin-top: 20px;
+        }
+        nav a {
+            color: white;
+            margin: 0 20px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #28a745;
+        }
+        section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .intro {
+            text-align: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 50px;
+        }
+        .intro h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #003366;
+            font-size: 2.5em;
+        }
+        .intro p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+        .plans {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .plan {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 30%;
+            min-width: 280px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .plan:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .plan h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: #003366;
+            font-size: 1.8em;
+        }
+        .plan .price {
+            font-size: 2em;
+            color: #28a745;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .plan ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        .plan li {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .plan li::before {
+            content: '✓';
+            color: #28a745;
+            position: absolute;
+            left: 0;
+        }
+        .btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+        }
+        .quiz {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+        }
+        .quiz h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: #003366;
+        }
+        .quiz form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .quiz label {
+            display: block;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .quiz input[type="radio"] {
+            margin-right: 10px;
+        }
+        .quiz button {
+            background: #003366;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+        .quiz button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #28a745;
+        }
+        .features {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 40px;
+        }
+        .features h2 {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            color: #003366;
+        }
+        .features ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+        }
+        .features li {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .features li i {
+            font-size: 2em;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        footer {
+            background: #003366;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        footer a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .plans {
+                flex-direction: column;
+            }
+            .plan {
+                width: 100%;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="p-3">
-            <h4><i class="fas fa-shield-alt"></i> Medproteg</h4>
-            <button class="btn btn-light btn-sm mt-3" id="toggleSidebar"><i class="fas fa-bars"></i></button>
-        </div>
+    <header>
+        <h1><i class="fas fa-shield-alt"></i> Medproteg</h1>
+        <p>Proteja sua empresa de saúde com segurança jurídica e conformidade LGPD</p>
         <nav>
-            <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
-            <a href="#compliance"><i class="fas fa-gavel"></i> <span>Compliance Jurídico</span></a>
-            <a href="#envio-documentos"><i class="fas fa-upload"></i> <span>Envio de Documentos</span></a>
-            <a href="#auditorias"><i class="fas fa-search"></i> <span>Auditorias</span></a>
-            <a href="#relatorios"><i class="fas fa-chart-bar"></i> <span>Relatórios</span></a>
-            <a href="#alertas"><i class="fas fa-exclamation-triangle"></i> <span>Alertas</span></a>
-            <a href="#configuracoes"><i class="fas fa-cog"></i> <span>Configurações</span></a>
+            <a href="#intro">Sobre</a>
+            <a href="#quiz">Avaliação de Risco</a>
+            <a href="#plans">Planos</a>
+            <a href="#features">Funcionalidades</a>
+            <a href="#contact">Contato</a>
         </nav>
-    </div>
+    </header>
 
-    <!-- Main Content -->
-    <div class="main-content" id="mainContent">
-        <header class="mb-4">
-            <h1><i class="fas fa-hospital"></i> Dashboard do Cliente - Hospital São Lucas</h1>
-            <p class="text-muted">Foco em segurança jurídica, LGPD e compliance hospitalar personalizado.</p>
-        </header>
+    <section id="intro" class="intro">
+        <h2>Seu Primeiro Passo para a Segurança Jurídica</h2>
+        <p>Imagine uma empresa de saúde onde a conformidade com a LGPD não é um fardo, mas uma vantagem competitiva. O Medproteg é totalmente focado no setor de saúde: analisamos vulnerabilidades, relatórios de prontuários, gravidade de riscos e otimizamos seu tempo com IA para pontuações precisas. Evite multas, proteja dados de pacientes e garanta a confiança dos seus clientes. Somos especialistas em transformar compliance em eficiência, com ferramentas personalizadas para o seu negócio.</p>
+        <p><i class="fas fa-heartbeat" style="color: #28a745;"></i> Saúde, segurança e inovação jurídica em um só lugar.</p>
+    </section>
 
-        <!-- Dashboard Overview -->
-        <section id="dashboard" class="mb-5">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card compliance-section">
-                        <div class="card-body text-center">
-                            <h5>Score de Compliance</h5>
-                            <div class="gauge-container">
-                                <canvas id="complianceGauge" aria-label="Score de Compliance: 85%"></canvas>
-                            </div>
-                            <p class="mt-2">85% - Nível Alto</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">Resumo de Atividades</div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <h6><i class="fas fa-file-alt"></i> Relatórios Gerados</h6>
-                                    <p>12 este mês</p>
-                                </div>
-                                <div class="col-6">
-                                    <h6><i class="fas fa-user-shield"></i> Auditorias Concluídas</h6>
-                                    <p>5 pendentes</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <section id="quiz" class="quiz">
+        <h2>Avaliação de Risco de Vazamento de Dados</h2>
+        <p>Responda a este quiz rápido para descobrir o nível de risco da sua empresa com base nas suas respostas. Cada escolha afeta diretamente o cálculo – marque as opções que se aplicam a você para um resultado preciso. Leva menos de 1 minuto!</p>
+        <form id="riskQuiz">
+            <label>
+                <strong>1. Você armazena dados pessoais de pacientes (ex.: prontuários)?</strong><br>
+                <input type="radio" name="q1" value="1"> Sim, muitos (alto risco)<br>
+                <input type="radio" name="q1" value="0"> Não, ou muito poucos (baixo risco)
+            </label>
+            <label>
+                <strong>2. Você tem políticas claras de privacidade e consentimento para dados?</strong><br>
+                <input type="radio" name="q2" value="0"> Sim, implementadas (baixo risco)<br>
+                <input type="radio" name="q2" value="1"> Não, ou parcialmente (alto risco)
+            </label>
+            <label>
+                <strong>3. Você realiza auditorias regulares de segurança de dados?</strong><br>
+                <input type="radio" name="q3" value="0"> Sim, frequentemente (baixo risco)<br>
+                <input type="radio" name="q3" value="1"> Não, raramente (alto risco)
+            </label>
+            <label>
+                <strong>4. Você já teve incidentes de vazamento de dados no passado?</strong><br>
+                <input type="radio" name="q4" value="1"> Sim (alto risco)<br>
+                <input type="radio" name="q4" value="0"> Não (baixo risco)
+            </label>
+            <button type="button" onclick="calculateRisk()">Calcular Risco e Gerar Relatório</button>
+        </form>
+        <div id="result" class="result" style="display: none;"></div>
+    </section>
+
+    <section id="plans">
+        <h2>Escolha o Plano Ideal para Sua Empresa</h2>
+        <div class="plans">
+            <div class="plan">
+                <h3><i class="fas fa-file-alt"></i> Pagamento Único</h3>
+                <div class="price">R$ 600,00</div>
+                <p>(uma vez)</p>
+                <ul>
+                    <li>Acesso vitalício a informações sempre atualizadas sobre LGPD e compliance.</li>
+                    <li>Base de conhecimento digital para consultas rápidas e eficientes.</li>
+                    <li>Ideal para empresas que precisam de suporte básico e atualizações contínuas sem recorrência.</li>
+                </ul>
+                <a href="https://wa.me/5511999999999?text=Quero%20contratar%20o%20plano%20Pagamento%20Único" class="btn">Contratar Agora</a>
             </div>
-        </section>
-
-        <!-- Compliance Jurídico Personalizado para Hospitais -->
-        <section id="compliance" class="mb-5">
-            <h2><i class="fas fa-gavel"></i> Compliance Jurídico</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">LGPD - Tratamento de Dados Pessoais</div>
-                        <div class="card-body">
-                            <p>Gestão de dados de pacientes: Consentimentos coletados, anonimização aplicada.</p>
-                            <ul>
-                                <li>Dados sensíveis: Prontuários médicos protegidos.</li>
-                                <li>Relatório de conformidade: 95% aderente.</li>
-                            </ul>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#lgpdModal">Ver Detalhes</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">Riscos Hospitalares</div>
-                        <div class="card-body">
-                            <p>Identificação de riscos: Vazamentos de dados, não conformidades com normas sanitárias.</p>
-                            <canvas id="riskChart" aria-label="Gráfico de Riscos"></canvas>
-                        </div>
-                    </div>
-                </div>
+            <div class="plan">
+                <h3><i class="fas fa-chart-line"></i> Mensal</h3>
+                <div class="price">R$ 199,00</div>
+                <p>/mês</p>
+                <ul>
+                    <li>Envio personalizado de relatórios e dados de prontuários.</li>
+                    <li>Análise de vulnerabilidades e gravidade de riscos.</li>
+                    <li>Pontuação de compliance via IA (score automático).</li>
+                    <li>Otimização de tempo para conformidade digital.</li>
+                </ul>
+                <a href="https://wa.me/5511999999999?text=Quero%20contratar%20o%20plano%20Mensal" class="btn">Contratar Agora</a>
             </div>
-        </section>
-
-        <!-- Envio de Documentos para Análise de Compliance -->
-        <section id="envio-documentos" class="mb-5">
-            <h2><i class="fas fa-upload"></i> Envio de Documentos para Análise de Compliance</h2>
-            <div class="card">
-                <div class="card-header">Envie Documentos para Revisão Jurídica</div>
-                <div class="card-body">
-                    <p class="text-muted">Envie contratos, prontuários anonimizados ou relatórios para análise de conformidade com LGPD e normas hospitalares. Arquivos até 10MB.</p>
-                    <form id="uploadForm">
-                        <div class="mb-3">
-                            <label for="documentFile" class="form-label">Selecionar Arquivo</label>
-                            <input type="file" class="form-control" id="documentFile" accept=".pdf,.doc,.docx,.txt" multiple required aria-describedby="fileHelp">
-                            <div id="fileHelp" class="form-text">Suportados: PDF, DOC, DOCX, TXT. Anonimize dados sensíveis antes do envio.</div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="documentDescription" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="documentDescription" rows="3" placeholder="Descreva o documento (ex.: Contrato de prestação de serviços médicos)" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="priority" class="form-label">Prioridade</label>
-                            <select class="form-select" id="priority">
-                                <option value="baixa">Baixa</option>
-                                <option value="media">Média</option>
-                                <option value="alta">Alta</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-success">Enviar para Análise</button>
-                    </form>
-                    <hr>
-                    <h5>Documentos Enviados</h5>
-                    <ul class="list-group" id="documentList">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Contrato_Hospital_2023.pdf <span class="badge bg-warning">Em Análise</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Prontuario_Anonimizado.docx <span class="badge bg-success">Aprovado</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Auditorias -->
-        <section id="auditorias" class="mb-5">
-            <h2><i class="fas fa-search"></i> Auditorias</h2>
-            <div class="card">
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Tipo</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>15/10/2023</td>
-                                <td>LGPD - Dados de Pacientes</td>
-                                <td><span class="badge bg-success">Aprovado</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary">Ver Relatório</button></td>
-                            </tr>
-                            <tr>
-                                <td>20/10/2023</td>
-                                <td>Segurança Jurídica</td>
-                                <td><span class="badge bg-warning">Pendente</span></td>
-                                <td><button class="btn btn-sm btn-outline-primary">Ver Relatório</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- Relatórios -->
-        <section id="relatorios" class="mb-5">
-            <h2><i class="fas fa-chart-bar"></i> Relatórios</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">Relatórios Mensais de Compliance</div>
-                        <div class="card-body">
-                            <canvas id="monthlyReportChart" aria-label="Relatórios Mensais"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">Exportar Relatório</div>
-                        <div class="card-body">
-                            <button class="btn btn-success" onclick="exportReport()">Gerar PDF</button>
-                            <p class="mt-2 text-muted">Inclui dados de LGPD e auditorias.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Alertas -->
-        <section id="alertas" class="mb-5">
-            <h2><i class="fas fa-exclamation-triangle"></i> Alertas</h2>
-            <div class="alert alert-custom">
-                <strong>Atenção:</strong> Possível vazamento de dados em prontuários médicos. Verifique conformidade com LGPD.
-            </div>
-            <div class="alert alert-danger">
-                <strong>Risco Alto:</strong> Auditoria pendente para segurança jurídica em contratos hospitalares.
-            </div>
-        </section>
-    </div>
-
-    <!-- Botão Flutuante para Bot LGPD -->
-    <button class="fab" id="fabBtn" aria-label="Abrir Bot LGPD 24h"><i class="fas fa-robot"></i></button>
-
-    <!-- Chatbot LGPD 24h -->
-    <div class="chatbot" id="chatbot">
-        <div class="chatbot-header">
-            <h5><i class="fas fa-robot"></i> Bot LGPD 24h</h5>
-            <button class="btn-close btn-close-white" id="closeChatbot" aria-label="Fechar Chatbot"></button>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <p><strong>Bot:</strong> Olá! Sou o assistente especializado em LGPD para hospitais. Como posso ajudar hoje? (Ex.: "O que é LGPD?" ou "Como anonimizar dados de pacientes?")</p>
-        </div>
-        <div class="chat-input">
-            <input type="text" class="form-control" id="chatInput" placeholder="Digite sua pergunta sobre LGPD...">
-            <button class="btn btn-primary mt-2" id="sendBtn">Enviar</button>
-        </div>
-    </div>
-
-    <!-- Modal para LGPD -->
-    <div class="modal fade" id="lgpdModal" tabindex="-1" aria-labelledby="lgpdModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="lgpdModalLabel">Detalhes LGPD</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Em hospitais, a LGPD exige consentimento explícito para tratamento de dados pessoais. Dados sensíveis (como saúde) devem ser criptografados e auditados regularmente.</p>
-                    <ul>
-                        <li>Base legal: Consentimento ou legítimo interesse.</li>
-                        <li>Medidas: Anonimização e controle de acesso.</li>
-                    </ul>
-                </div>
+            <div class="plan">
+                <h3><i class="fas fa-star"></i> Premium</h3>
+                <div class="price">R$ 250,00</div>
+                <p>/mês</p>
+                <ul>
+                    <li>Todas as funcionalidades do plano Mensal.</li>
+                    <li>Acesso a advogado/consultor jurídico uma vez por mês.</li>
+                    <li>Consultorias personalizadas e suporte prioritário.</li>
+                    <li>Análises avançadas e relatórios exclusivos.</li>
+                </ul>
+                <a href="https://wa.me/5511999999999?text=Quero%20contratar%20o%20plano%20Premium" class="btn">Contratar Agora</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <section id="features" class="features">
+        <h2>Por Que Escolher o Medproteg?</h2>
+        <ul>
+            <li><i class="fas fa-upload"></i> <strong>Envio Seguro:</strong> Relatórios e prontuários médicos enviados com criptografia.</li>
+            <li><i class="fas fa-search"></i> <strong>Análise Inteligente:</strong> Detecção automática de vulnerabilidades e escolhas de dados.</li>
+            <li><i class="fas fa-exclamation-triangle"></i> <strong>Avaliação de Gravidade:</strong> Classificação precisa de riscos conforme LGPD.</li>
+            <li><i class="fas fa-robot"></i> <strong>IA para Score:</strong> Cálculo em tempo real do nível de compliance.</li>
+            <li><i class="fas fa-clock"></i> <strong>Otimização de Tempo:</strong> Processos digitais que economizam horas.</li>
+            <li><i class="fas fa-user-tie"></i> <strong>Consultoria Jurídica:</strong> Acesso a especialistas (no plano Premium).</li>
+        </ul>
+    </section>
+
+    <footer id="contact">
+        <p>Contato: <a href="mailto:contato@medproteg.com.br">contato@medproteg.com.br</a> | WhatsApp: (11) 99999-9999</p>
+        <p>&copy; 2023 Medproteg. Todos os direitos reservados. Focado em saúde e segurança jurídica.</p>
+    </footer>
+
     <script>
-        // Toggle Sidebar
-        document.getElementById('toggleSidebar').addEventListener('click', function() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
-        });
+        function calculateRisk() {
+            const form = document.getElementById('riskQuiz');
+            const q1 = form.q1.value;
+            const q2 = form.q2.value;
+            const q3 = form.q3.value;
+            const q4 = form.q4.value;
 
-        // Compliance Gauge
-        const ctxGauge = document.getElementById('complianceGauge').getContext('2d');
-        new Chart(ctxGauge, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [85, 15],
-                    backgroundColor: ['#28a745', '#e9ecef'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                cutout: '70%',
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { enabled: false }
-                }
+            // Validação: Verifica se todas as perguntas foram respondidas
+            if (!q1 || !q2 || !q3 || !q4) {
+                alert('Por favor, responda todas as perguntas antes de calcular o risco.');
+                return;
+            }
+
+            // Calcula o score baseado nas respostas assinaladas
+            const score = parseInt(q1) + parseInt(q2) + parseInt(q3) + parseInt(q4);
+            let risk, suggestion, summary;
+            if (score <= 1) {
+                risk = 'Baixo';
+                suggestion = 'Pagamento Único';
+                summary = 'Suas práticas indicam baixo risco. Foque em manutenção básica.';
+            } else if (score === 2) {
+                risk = 'Médio';
+                suggestion = 'Mensal';
+                summary = 'Há algumas vulnerabilidades. Recomendamos monitoramento contínuo.';
+            } else {
+                risk = 'Alto';
+                suggestion = 'Premium';
+                summary = 'Risco elevado detectado. Ações imediatas são essenciais.';
+            }
+
+            // Exibe o resultado com base nas respostas
+            document.getElementById('result').innerHTML = `
+                <p><strong>Nível de Risco: ${risk}</strong></p>
+                <p>${summary}</p>
+                <p>Com base nas suas respostas, recomendamos o plano <strong>${suggestion}</strong> para mitigar riscos e garantir compliance.</p>
+                <p><em>Relatório Simulado:</em> Suas respostas indicam foco em [resumo breve baseado em score]. Baixe um PDF básico ou entre em contato para um relatório personalizado.</p>
+                <a href="https://wa.me/5511999999999?text=Quero%20um%20relatório%20personalizado%20após%20o%20quiz" class="btn">Solicitar Relatório</a>
+            `;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
