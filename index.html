@@ -3,408 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthCompli - Consultoria Jurídica em Saúde e Tecnologia</title>
+    <title>Dashboard Medproteg - Hospital São Lucas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-
-        section {
-            margin-bottom: 40px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        section h2 {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
-        }
-
-        .cta-button {
-            background-color: #28a745;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1.2em;
-            display: inline-block;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .cta-button:hover {
-            background-color: #218838;
-        }
-
-        .quiz-question {
-            margin-bottom: 20px;
-        }
-
-        .quiz-question label {
-            display: block;
-            margin: 5px 0;
-        }
-
-        .quiz-result {
-            display: none;
-            padding: 20px;
-            background-color: #e9ecef;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .quiz-result h3 {
-            color: #007bff;
-        }
-
-        .lead-form {
-            display: none;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .lead-form input {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .lead-form button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .lead-form button:hover {
-            background-color: #0056b3;
-        }
-
-        footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-        }
-
-        footer p {
-            margin: 5px 0;
-        }
-
-        /* Estilos para o chatbot */
-        #chatbot {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            height: 400px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            display: none;
-            flex-direction: column;
-            z-index: 1000;
-        }
-
-        #chatbot.show {
-            display: flex;
-        }
-
-        #chat-header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            border-radius: 10px 10px 0 0;
-        }
-
-        #chat-messages {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-            background-color: #f9f9f9;
-        }
-
-        #chat-input {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #ccc;
-        }
-
-        #chat-input input {
-            flex: 1;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        #chat-input button {
-            margin-left: 5px;
-            padding: 5px 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #chat-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
-            }
-            
-            #chatbot {
-                width: 90%;
-                right: 5%;
-            }
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; }
+        .sidebar { background-color: #007bff; color: white; min-height: 100vh; position: fixed; width: 250px; transition: width 0.3s; }
+        .sidebar.collapsed { width: 70px; }
+        .sidebar a { color: white; text-decoration: none; display: block; padding: 15px; }
+        .sidebar a:hover { background-color: #0056b3; }
+        .main-content { margin-left: 250px; padding: 20px; transition: margin-left 0.3s; }
+        .main-content.expanded { margin-left: 70px; }
+        .card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .gauge-container { position: relative; width: 200px; height: 200px; margin: 0 auto; }
+        .alert-custom { background-color: #fff3cd; border-color: #ffeaa7; color: #856404; }
+        .compliance-section { background-color: #e7f3ff; padding: 20px; border-radius: 10px; }
+        .chatbot { position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); display: none; z-index: 1000; }
+        .chatbot-header { background: #007bff; color: white; padding: 10px; border-radius: 10px 10px 0 0; }
+        .chat-messages { height: 300px; overflow-y: auto; padding: 10px; }
+        .chat-input { padding: 10px; border-top: 1px solid #ddd; }
+        .fab { position: fixed; bottom: 20px; right: 20px; background: #007bff; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; z-index: 1001; }
+        @media (max-width: 768px) { .sidebar { width: 100%; position: relative; } .main-content { margin-left: 0; } .chatbot { width: 90%; right: 5%; } }
     </style>
 </head>
 <body>
-    <header>
-        <h1>HealthCompli - Consultoria Jurídica em Saúde e Tecnologia</h1>
-    </header>
-    
-    <main>
-        <!-- Seção Principal (O Gancho) -->
-        <section id="gancho">
-            <h2>Qual o seu Score de Risco Jurídico?</h2>
-            <p>Gestores hospitalares e empresas de saúde e tecnologia enfrentam riscos crescentes de multas por não compliance com leis como LGPD, regulamentações de telemedicina e patentes. Faça o teste rápido em 5 minutos e descubra seu nível de exposição!</p>
-            <a href="#quiz" class="cta-button">Faça o Teste Rápido Agora</a>
-        </section>
-        
-        <!-- Seção do Quiz (Diagnóstico) -->
-        <section id="quiz">
-            <h2>Teste de Risco Jurídico</h2>
-            <p>Responda às perguntas abaixo para calcular seu Score de Risco (0-10). Cada resposta atribui pontos baseados em conformidade.</p>
-            <form id="quiz-form">
-                <div class="quiz-question">
-                    <p>1. Vocês têm Termos de Consentimento Específicos para a LGPD?</p>
-                    <label><input type="radio" name="q1" value="0"> Sim, detalhados e atualizados.</label>
-                    <label><input type="radio" name="q1" value="1"> Sim, mas genéricos.</label>
-                    <label><input type="radio" name="q1" value="2"> Não, ou inexistentes.</label>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="p-3">
+            <h4><i class="fas fa-shield-alt"></i> Medproteg</h4>
+            <button class="btn btn-light btn-sm mt-3" id="toggleSidebar"><i class="fas fa-bars"></i></button>
+        </div>
+        <nav>
+            <a href="#dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+            <a href="#compliance"><i class="fas fa-gavel"></i> <span>Compliance Jurídico</span></a>
+            <a href="#envio-documentos"><i class="fas fa-upload"></i> <span>Envio de Documentos</span></a>
+            <a href="#auditorias"><i class="fas fa-search"></i> <span>Auditorias</span></a>
+            <a href="#relatorios"><i class="fas fa-chart-bar"></i> <span>Relatórios</span></a>
+            <a href="#alertas"><i class="fas fa-exclamation-triangle"></i> <span>Alertas</span></a>
+            <a href="#configuracoes"><i class="fas fa-cog"></i> <span>Configurações</span></a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <header class="mb-4">
+            <h1><i class="fas fa-hospital"></i> Dashboard do Cliente - Hospital São Lucas</h1>
+            <p class="text-muted">Foco em segurança jurídica, LGPD e compliance hospitalar personalizado.</p>
+        </header>
+
+        <!-- Dashboard Overview -->
+        <section id="dashboard" class="mb-5">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card compliance-section">
+                        <div class="card-body text-center">
+                            <h5>Score de Compliance</h5>
+                            <div class="gauge-container">
+                                <canvas id="complianceGauge" aria-label="Score de Compliance: 85%"></canvas>
+                            </div>
+                            <p class="mt-2">85% - Nível Alto</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="quiz-question">
-                    <p>2. Seu prontuário eletrônico tem backup criptografado?</p>
-                    <label><input type="radio" name="q2" value="0"> Sim, com certificação de segurança.</label>
-                    <label><input type="radio" name="q2" value="1"> Sim, mas sem auditoria.</label>
-                    <label><input type="radio" name="q2" value="2"> Não, ou sem criptografia.</label>
-                </div>
-                <div class="quiz-question">
-                    <p>3. Você oferece telemedicina com registro no CFM?</p>
-                    <label><input type="radio" name="q3" value="0"> Sim, totalmente regulamentado.</label>
-                    <label><input type="radio" name="q3" value="1"> Sim, parcialmente.</label>
-                    <label><input type="radio" name="q3" value="2"> Não, ou sem registro.</label>
-                </div>
-                <div class="quiz-question">
-                    <p>4. Suas patentes em tecnologia médica estão registradas no INPI?</p>
-                    <label><input type="radio" name="q4" value="0"> Sim, todas protegidas.</label>
-                    <label><input type="radio" name="q4" value="1"> Algumas, mas não todas.</label>
-                    <label><input type="radio" name="q4" value="2"> Não, ou nenhuma.</label>
-                </div>
-                <div class="quiz-question">
-                    <p>5. Você tem contratos claros com fornecedores de dados?</p>
-                    <label><input type="radio" name="q5" value="0"> Sim, revisados por advogados.</label>
-                    <label><input type="radio" name="q5" value="1"> Sim, mas básicos.</label>
-                    <label><input type="radio" name="q5" value="2"> Não, ou verbais.</label>
-                </div>
-                <button type="button" class="cta-button" id="submit-quiz">Calcular Meu Score</button>
-            </form>
-            <div class="quiz-result" id="quiz-result">
-                <h3 id="result-title"></h3>
-                <p id="result-text"></p>
-                <p>Para receber o relatório completo e diagnóstico detalhado, preencha os dados abaixo.</p>
-                <div class="lead-form" id="lead-form">
-                    <input type="text" id="nome" placeholder="Nome Completo" required>
-                    <input type="email" id="email" placeholder="E-mail" required>
-                    <input type="text" id="cnpj" placeholder="CNPJ" required>
-                    <button id="submit-lead">Receber Relatório Completo</button>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Resumo de Atividades</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6><i class="fas fa-file-alt"></i> Relatórios Gerados</h6>
+                                    <p>12 este mês</p>
+                                </div>
+                                <div class="col-6">
+                                    <h6><i class="fas fa-user-shield"></i> Auditorias Concluídas</h6>
+                                    <p>5 pendentes</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-    </main>
-    
-    <!-- Rodapé -->
-    <footer>
-        <p><strong>Contato:</strong> Email: contato@healthcompli.com | WhatsApp Business: <a href="https://wa.me/5511999999999" style="color: white;">(11) 9999-9999</a></p>
-        <p><strong>Missão:</strong> Compliance e Inovação Jurídica – Ajudamos empresas a navegar pelas leis complexas de saúde e tecnologia com segurança e eficiência.</p>
-        <p>&copy; 2023 HealthCompli. Todos os direitos reservados.</p>
-    </footer>
-    
-    <!-- Botão para abrir o chatbot -->
-    <button id="chat-toggle">💬</button>
-    
-    <!-- Chatbot -->
-    <div id="chatbot">
-        <div id="chat-header">Assistente Jurídico IA</div>
-        <div id="chat-messages">
-            <p><strong>Bot:</strong> Olá! Sou o assistente jurídico. Pergunte sobre saúde digital, privacidade de dados ou compliance. Ex.: "O que é LGPD?"</p>
+
+        <!-- Compliance Jurídico Personalizado para Hospitais -->
+        <section id="compliance" class="mb-5">
+            <h2><i class="fas fa-gavel"></i> Compliance Jurídico</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">LGPD - Tratamento de Dados Pessoais</div>
+                        <div class="card-body">
+                            <p>Gestão de dados de pacientes: Consentimentos coletados, anonimização aplicada.</p>
+                            <ul>
+                                <li>Dados sensíveis: Prontuários médicos protegidos.</li>
+                                <li>Relatório de conformidade: 95% aderente.</li>
+                            </ul>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#lgpdModal">Ver Detalhes</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Riscos Hospitalares</div>
+                        <div class="card-body">
+                            <p>Identificação de riscos: Vazamentos de dados, não conformidades com normas sanitárias.</p>
+                            <canvas id="riskChart" aria-label="Gráfico de Riscos"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Envio de Documentos para Análise de Compliance -->
+        <section id="envio-documentos" class="mb-5">
+            <h2><i class="fas fa-upload"></i> Envio de Documentos para Análise de Compliance</h2>
+            <div class="card">
+                <div class="card-header">Envie Documentos para Revisão Jurídica</div>
+                <div class="card-body">
+                    <p class="text-muted">Envie contratos, prontuários anonimizados ou relatórios para análise de conformidade com LGPD e normas hospitalares. Arquivos até 10MB.</p>
+                    <form id="uploadForm">
+                        <div class="mb-3">
+                            <label for="documentFile" class="form-label">Selecionar Arquivo</label>
+                            <input type="file" class="form-control" id="documentFile" accept=".pdf,.doc,.docx,.txt" multiple required aria-describedby="fileHelp">
+                            <div id="fileHelp" class="form-text">Suportados: PDF, DOC, DOCX, TXT. Anonimize dados sensíveis antes do envio.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentDescription" class="form-label">Descrição</label>
+                            <textarea class="form-control" id="documentDescription" rows="3" placeholder="Descreva o documento (ex.: Contrato de prestação de serviços médicos)" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="priority" class="form-label">Prioridade</label>
+                            <select class="form-select" id="priority">
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar para Análise</button>
+                    </form>
+                    <hr>
+                    <h5>Documentos Enviados</h5>
+                    <ul class="list-group" id="documentList">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Contrato_Hospital_2023.pdf <span class="badge bg-warning">Em Análise</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Prontuario_Anonimizado.docx <span class="badge bg-success">Aprovado</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auditorias -->
+        <section id="auditorias" class="mb-5">
+            <h2><i class="fas fa-search"></i> Auditorias</h2>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15/10/2023</td>
+                                <td>LGPD - Dados de Pacientes</td>
+                                <td><span class="badge bg-success">Aprovado</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary">Ver Relatório</button></td>
+                            </tr>
+                            <tr>
+                                <td>20/10/2023</td>
+                                <td>Segurança Jurídica</td>
+                                <td><span class="badge bg-warning">Pendente</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary">Ver Relatório</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Relatórios -->
+        <section id="relatorios" class="mb-5">
+            <h2><i class="fas fa-chart-bar"></i> Relatórios</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Relatórios Mensais de Compliance</div>
+                        <div class="card-body">
+                            <canvas id="monthlyReportChart" aria-label="Relatórios Mensais"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">Exportar Relatório</div>
+                        <div class="card-body">
+                            <button class="btn btn-success" onclick="exportReport()">Gerar PDF</button>
+                            <p class="mt-2 text-muted">Inclui dados de LGPD e auditorias.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alertas -->
+        <section id="alertas" class="mb-5">
+            <h2><i class="fas fa-exclamation-triangle"></i> Alertas</h2>
+            <div class="alert alert-custom">
+                <strong>Atenção:</strong> Possível vazamento de dados em prontuários médicos. Verifique conformidade com LGPD.
+            </div>
+            <div class="alert alert-danger">
+                <strong>Risco Alto:</strong> Auditoria pendente para segurança jurídica em contratos hospitalares.
+            </div>
+        </section>
+    </div>
+
+    <!-- Botão Flutuante para Bot LGPD -->
+    <button class="fab" id="fabBtn" aria-label="Abrir Bot LGPD 24h"><i class="fas fa-robot"></i></button>
+
+    <!-- Chatbot LGPD 24h -->
+    <div class="chatbot" id="chatbot">
+        <div class="chatbot-header">
+            <h5><i class="fas fa-robot"></i> Bot LGPD 24h</h5>
+            <button class="btn-close btn-close-white" id="closeChatbot" aria-label="Fechar Chatbot"></button>
         </div>
-        <div id="chat-input">
-            <input type="text" id="user-input" placeholder="Digite sua pergunta...">
-            <button id="send-btn">Enviar</button>
+        <div class="chat-messages" id="chatMessages">
+            <p><strong>Bot:</strong> Olá! Sou o assistente especializado em LGPD para hospitais. Como posso ajudar hoje? (Ex.: "O que é LGPD?" ou "Como anonimizar dados de pacientes?")</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" class="form-control" id="chatInput" placeholder="Digite sua pergunta sobre LGPD...">
+            <button class="btn btn-primary mt-2" id="sendBtn">Enviar</button>
         </div>
     </div>
-    
+
+    <!-- Modal para LGPD -->
+    <div class="modal fade" id="lgpdModal" tabindex="-1" aria-labelledby="lgpdModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lgpdModalLabel">Detalhes LGPD</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Em hospitais, a LGPD exige consentimento explícito para tratamento de dados pessoais. Dados sensíveis (como saúde) devem ser criptografados e auditados regularmente.</p>
+                    <ul>
+                        <li>Base legal: Consentimento ou legítimo interesse.</li>
+                        <li>Medidas: Anonimização e controle de acesso.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // JavaScript para o chatbot
-        const chatToggle = document.getElementById('chat-toggle');
-        const chatbot = document.getElementById('chatbot');
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-
-        chatToggle.addEventListener('click', () => {
-            chatbot.classList.toggle('show');
+        // Toggle Sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
         });
 
-        function addMessage(sender, message) {
-            const msgDiv = document.createElement('p');
-            msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function getBotResponse(input) {
-            const lowerInput = input.toLowerCase();
-            if (lowerInput.includes('lgpd')) {
-                return 'A LGPD (Lei Geral de Proteção de Dados) regula o tratamento de dados pessoais no Brasil. Ela exige consentimento, transparência e direitos aos titulares. Para detalhes, consulte um advogado.';
-            } else if (lowerInput.includes('telemedicina')) {
-                return 'A telemedicina é regulamentada pela Resolução CFM 2.314/2020. Ela permite consultas remotas, mas com limitações éticas e legais. Recomendamos assessoria especializada.';
-            } else if (lowerInput.includes('privacidade')) {
-                return 'Privacidade de dados envolve leis como LGPD e GDPR. Em saúde, proteja informações sensíveis com criptografia e compliance. Entre em contato para mais detalhes.';
-            } else if (lowerInput.includes('patente')) {
-                return 'Patentes em tecnologia médica protegem invenções. O processo envolve INPI no Brasil. Podemos ajudar com registro e defesa.';
-            } else {
-                return 'Desculpe, não entendi. Pergunte sobre regulamentações de saúde digital, privacidade ou compliance. Ou diga "ajuda" para opções.';
-            }
-        }
-
-        sendBtn.addEventListener('click', () => {
-            const message = userInput.value.trim();
-            if (message) {
-                addMessage('Você', message);
-                const response = getBotResponse(message);
-                setTimeout(() => addMessage('Bot', response), 500);
-                userInput.value = '';
-            }
-        });
-
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendBtn.click();
-            }
-        });
-
-        // JavaScript para o quiz e lead capture
-        const submitBtn = document.getElementById('submit-quiz');
-        const quizResult = document.getElementById('quiz-result');
-        const resultTitle = document.getElementById('result-title');
-        const resultText = document.getElementById('result-text');
-        const leadForm = document.getElementById('lead-form');
-        const submitLeadBtn = document.getElementById('submit-lead');
-
-        submitBtn.addEventListener('click', () => {
-            const form = document.getElementById('quiz-form');
-            const answers = new FormData(form);
-            let score = 0;
-
-            // Calcular score (0-10, baseado em 5 perguntas de 0-2)
-            score += parseInt(answers.get('q1') || 0);
-            score += parseInt(answers.get('q2') || 0);
-            score += parseInt(answers.get('q3') || 0);
-            score += parseInt(answers.get('q4') || 0);
-            score += parseInt(answers.get('q5') || 0);
-
-            // Determinar resultado
-            let title, text;
-            if (score <= 3) {
-                title = `Seu Score é ${score}/10 - Risco Baixo`;
-                text = 'Parabéns! Sua empresa parece estar bem protegida contra multas e sanções.';
-            } else if (score <= 7) {
-                title = `Seu Score é ${score}/10 - Risco Médio`;
-                text = 'Há pontos de atenção. Revise suas práticas para reduzir riscos.';
-            } else {
-                title = `Seu Score é ${score}/10 - ALTO Risco`;
-                text = 'Você tem alto risco de multa por não-conformidade. Atue rapidamente!';
-            }
-
-            resultTitle.textContent = title;
-            resultText.textContent = text;
-            quizResult.style.display = 'block';
-            leadForm.style.display = 'block';
-            quizResult.scrollIntoView();
-        });
-
-        submitLeadBtn.addEventListener('click', () => {
-            const nome = document.getElementById('nome').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const cnpj = document.getElementById('cnpj').value.trim();
-
-            if (nome && email && cnpj) {
-                // Simulação de envio (em produção, use um backend como Google Forms, Mailchimp ou API)
-                alert(`Lead capturado: ${nome}, ${email}, ${cnpj}. Em produção, envie para sua caixa de entrada. Entraremos em contato para enviar o relatório completo e proposta de consultoria.`);
-                // Exemplo: Enviar para um endpoint (descomente e ajuste)
-                // fetch('/api/leads', { method: 'POST', body: JSON.stringify({ nome, email, cnpj }) });
-                leadForm.style.display = 'none';
-                resultText.textContent += ' Obrigado! Entraremos em contato em breve.';
-            } else {
-                alert('Preencha todos os campos.');
-            }
-        });
-    </script>
-</body>
-</html>
+        // Compliance Gauge
+        const ctxGauge = document.getElementById('complianceGauge').getContext('2d');
+        new Chart(ctxGauge, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [85, 15],
+                    backgroundColor: ['#28a745', '#e9ecef'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
